@@ -1,0 +1,163 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="stylesheet" href="css/style.css"></head><body>
+<title>KARASUP</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#boutique" aria-label="KARASUP, accueil">KARA<span class="sup">SUP</span></a>
+    <nav class="nav" id="nav" aria-label="Navigation">
+      <a href="#boutique" data-v="boutique">Boutique</a>
+      <a href="#suivi" data-v="suivi">Suivre ma commande</a>
+      <a href="#vendeur" data-v="vendeur" id="navShop" hidden>Ma boutique</a>
+      <a href="#livreur" data-v="livreur" id="navDrv" hidden>Espace livreur</a>
+      <a href="#gestion" data-v="gestion" id="navAdmin" hidden>Gestion</a>
+    </nav>
+    <div class="search" id="searchBox"><input id="q" type="search" placeholder="Rechercher un produit" aria-label="Rechercher un produit" autocomplete="off"></div>
+    <button class="cart-btn" data-act="open" id="cartBtn" aria-label="Ouvrir le panier">Panier <span class="n" id="cartCount">0</span></button>
+  </div>
+</header>
+
+<div id="view-boutique">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <h1>Vos courses, livrées jusqu'à votre porte.</h1>
+        <p class="lead">Remplissez votre panier, partagez votre position et envoyez la commande sur WhatsApp. Nous la préparons et un livreur vous l'apporte.</p>
+        <div class="hero-cta">
+          <button type="button" class="btn-w" data-act="catalog">Voir les produits</button>
+          <a class="btn-o" href="#suivi">Suivre ma commande</a>
+        </div>
+        <ul class="perks"><li>Livraison à domicile</li><li>Retrait en magasin</li><li>Espèces, TMoney, Flooz</li></ul>
+      </div>
+      <ol class="steps">
+        <li><b>Choisissez vos produits</b><span>Photos, détails et vue 3D de chaque article.</span></li>
+        <li><b>Indiquez où vous livrer</b><span>Partagez votre position en un geste.</span></li>
+        <li><b>Validez sur WhatsApp</b><span>Vous recevez un code pour suivre votre commande.</span></li>
+      </ol>
+    </div>
+  </section>
+  <main class="wrap" id="catalog">
+    <div class="chips" id="chips" role="group" aria-label="Catégories"></div>
+    <div class="list-head"><h2 id="listTitle">Tous les produits</h2><span id="listCount"></span></div>
+    <div class="grid" id="grid"></div>
+  </main>
+</div>
+
+<section id="view-suivi" class="wrap page" hidden>
+  <h1>Suivre ma commande</h1>
+  <p class="lead">Saisissez le code reçu dans votre message WhatsApp, par exemple KS-7H2QM.</p>
+  <form id="trackForm" class="trackform" novalidate>
+    <input id="trackCode" type="text" placeholder="KS-XXXXX" aria-label="Code de commande" autocomplete="off" maxlength="12">
+    <button class="btn" type="submit">Rechercher</button>
+  </form>
+  <div id="trackOut"></div>
+</section>
+
+<section id="view-vendeur" class="wrap page" hidden></section>
+<section id="view-livreur" class="wrap page" hidden></section>
+<section id="view-gestion" class="wrap page" hidden></section>
+
+<footer>
+  <div class="wrap">
+    <div><b>KARASUP</b><br>Supermarché en ligne</div>
+    <div><b>Commandes par WhatsApp</b><br><span id="footPhone"></span></div>
+    <div>Prix en FCFA. Le total final et les frais de livraison sont confirmés avec vous sur WhatsApp.</div>
+  </div>
+</footer>
+
+<button class="cartbar" id="cartBar" data-act="open" hidden><span id="barLabel"></span><span id="barTotal"></span></button>
+<div class="toast" id="toast" role="status" hidden></div>
+<div class="drvalert" id="drvAlert" role="alert" hidden><span id="drvAlertTxt"></span><a href="#livreur" data-act="alertclose">Voir</a></div>
+<input type="file" id="photoInput" accept="image/*" hidden>
+<input type="file" id="vPhotoInput" accept="image/*" hidden>
+
+<!-- Fiche produit -->
+<div class="scrim" id="pscrim" data-act="pclose" hidden></div>
+<div class="pmodal" id="pmodal" role="dialog" aria-modal="true" aria-labelledby="pTitle" hidden>
+  <button class="icon-btn pclose" data-act="pclose" id="pCloseBtn" aria-label="Fermer la fiche produit">×</button>
+  <div class="pm-media">
+    <div class="pm-tabs" role="group" aria-label="Affichage">
+      <button type="button" data-act="ptab" data-tab="photo" aria-pressed="true">Photo</button>
+      <button type="button" data-act="ptab" data-tab="3d" aria-pressed="false">Vue 3D</button>
+    </div>
+    <div class="pm-stage" id="pStage"></div>
+    <p class="pm-hint" id="pHint"></p>
+  </div>
+  <div class="pm-info" id="pInfo"></div>
+</div>
+
+<!-- Panier -->
+<div class="scrim" id="scrim" data-act="close" hidden></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" hidden>
+  <div class="drawer-head d-pad">
+    <h2 id="drawerTitle">Votre panier</h2>
+    <button class="icon-btn" data-act="close" id="closeBtn" aria-label="Fermer le panier">×</button>
+  </div>
+  <div class="drawer-body d-pad">
+    <div id="cartList"></div>
+    <form id="orderForm" novalidate>
+      <div class="field">
+        <label class="l" for="c-name">Votre nom</label>
+        <input id="c-name" type="text" autocomplete="name" placeholder="Ex. Kossi Mensah">
+        <p class="err" id="err-name" role="alert"></p>
+      </div>
+      <div class="field">
+        <label class="l" for="c-phone">Votre numéro de téléphone</label>
+        <input id="c-phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="Ex. 90 00 00 00">
+        <p class="err" id="err-phone" role="alert"></p>
+      </div>
+      <fieldset>
+        <legend>Réception de la commande</legend>
+        <div class="seg">
+          <label class="opt"><input type="radio" name="mode" id="mode-liv" value="Livraison à domicile"><span>Livraison</span></label>
+          <label class="opt"><input type="radio" name="mode" id="mode-ret" value="Retrait en magasin"><span>Retrait en magasin</span></label>
+        </div>
+      </fieldset>
+      <div id="addrField">
+        <div class="field">
+          <label class="l" for="c-addr">Quartier et repère de livraison</label>
+          <input id="c-addr" type="text" autocomplete="street-address" placeholder="Ex. Tokoin, près de la pharmacie">
+          <p class="err" id="err-addr" role="alert"></p>
+        </div>
+        <div class="geo">
+          <button type="button" class="ghost" data-act="geo" id="geoBtn">Utiliser ma position</button>
+          <p id="geoNote"></p>
+        </div>
+      </div>
+      <fieldset>
+        <legend>Paiement</legend>
+        <div class="seg">
+          <label class="opt"><input type="radio" name="pay" id="pay-esp" value="Espèces"><span>Espèces</span></label>
+          <label class="opt"><input type="radio" name="pay" id="pay-tm" value="TMoney"><span>TMoney</span></label>
+          <label class="opt"><input type="radio" name="pay" id="pay-fl" value="Flooz"><span>Flooz</span></label>
+        </div>
+      </fieldset>
+      <div class="field">
+        <label class="l" for="c-note">Précision (facultatif)</label>
+        <textarea id="c-note" placeholder="Ex. Tomates bien mûres, appeler avant d'arriver"></textarea>
+      </div>
+    </form>
+  </div>
+  <div class="drawer-foot d-pad" id="drawerFoot">
+    <div class="tot"><span>Sous-total</span><span id="subtotal"></span></div>
+    <p class="note" id="feeNote">Frais de livraison confirmés avec vous sur WhatsApp.</p>
+    <a class="wa" id="waLink" href="#" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 8.5c0 3.5 3 6.5 6.5 6.5l1-1.6-2-1-.9.8a4 4 0 0 1-1.9-1.9l.8-.9-1-2z" fill="currentColor"/></svg>
+      Commander sur WhatsApp
+    </a>
+    <p class="status" id="status" role="status" hidden></p>
+    <div class="row">
+      <button type="button" class="ghost" data-act="copy">Copier le message</button>
+      <button type="button" class="ghost" data-act="clear">Vider le panier</button>
+    </div>
+  </div>
+</aside>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/app.js"></script>
+
+</body></html>
