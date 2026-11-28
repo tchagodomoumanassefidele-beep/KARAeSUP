@@ -1,27 +1,12 @@
-# KARASUP - Reconstruction HTML/CSS/JavaScript
+# KARASUP
 
-Le projet original fourni a été organisé en fichiers distincts, sans réécrire sa logique métier.
+Boutique en ligne KARASUP — HTML, CSS et JavaScript.
 
-## Structure
-- `index.html`: structure de l'application
-- `css/style.css`: styles et animations
-- `js/app.js`: logique JavaScript
-- `images/`: dossier pour les images produits
+## Lancer en local
+1. Ouvrir le dossier dans VS Code.
+2. Lancer `index.html` avec Live Server.
 
-## Démarrage
-1. Décompressez le dossier.
-2. Ouvrez `index.html` dans votre navigateur (ou ouvrez le dossier dans VS Code).
-3. Pour un développement plus confortable, utilisez l'extension VS Code Live Server.
+## Déploiement
+Un workflow GitHub Actions est configuré dans `.github/workflows/pages.yml` pour déployer le site sur GitHub Pages à chaque mise à jour de la branche `main`.
 
-## Configuration importante
-Dans `js/app.js`, cherchez le bloc `CONFIG` au début du fichier:
-- `whatsapp`: numéro WhatsApp de réception des commandes (format international sans `+`).
-- `whatsappAffiche`: numéro affiché aux clients.
-- `pinGestion`: code local de gestion (protection légère seulement).
-- `boutique`: coordonnées de la boutique, à remplacer par les coordonnées réelles.
-- `frais`: règles d'estimation des frais de livraison.
-
-## Attention
-Le mode local et un code PIN dans le navigateur ne constituent pas une sécurité de production. Les données et permissions doivent être sécurisées côté serveur avant une mise en ligne réelle. Le site contient des fonctions liées à l'environnement Artifact/Claude qui peuvent nécessiter un backend et/ou des tests lors d'un hébergement classique.
-
-Ce paquet est une séparation des fichiers du code source fourni, pas une validation complète de toutes les fonctions ni un déploiement.
+Le site utilise les fichiers à la racine (`index.html`, `style.css`, `app.js`). Les fonctions nécessitant des services externes (Google Fonts, Three.js, géolocalisation) demandent une connexion Internet et doivent être testées.
